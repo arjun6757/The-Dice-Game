@@ -1,78 +1,96 @@
+document.addEventListener('DOMContentLoaded', () => {
 
-function myFunction(){
-var firstDice = 0;
-var secondDice = 0;
+  const first = document.getElementsByClassName("first-one")[0];
+  const second = document.getElementsByClassName("second-one")[0];
+  const mutableText = document.querySelector(".mutable-text");
+  const tieFlag = '🏳️';
+  const winningFlag = '🏁';
+  var firstValue = 0, secondValue = 0;
 
-firstDice = generateRandom();
-secondDice = generateRandom();
-
-setAttribute(firstDice, secondDice);
-decide(firstDice, secondDice);
-}
-
-function generateRandom() {
-  var random_value = (Math.random() * 6)+1;
-  var value = Math.floor(random_value);
-  return value;
-}
-
-function setAttribute(firstDice, secondDice){
-  switch (firstDice) {
-    case 1:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice1.png');      
-      break;
-    case 2:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice2.png');
-      break;
-    case 3:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice3.png');
-      break;
-    case 4:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice4.png');
-      break;
-    case 5:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice5.png');
-      break;
-    case 6:
-      document.firstElementChild.lastElementChild.querySelector(".first-one").setAttribute("src", './images/dice6.png');
-      break;
-  
-    default: console.log("try again!");
-      break;
+  first.onclick = async function () {
+    await playRollingSound();
+    firstValue = generateRandom();
+    updateDice(this, firstValue);
+    isItTime();
   }
 
-  switch (secondDice) {
-    case 1:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice1.png');
-      break;
-    case 2:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice2.png');
-      break;
-    case 3:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice3.png');
-      break;
-    case 4:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice4.png');
-      break;
-    case 5:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice5.png');
-      break;
-    case 6:
-      document.firstElementChild.lastElementChild.querySelector(".second-one").setAttribute("src", './images/dice6.png');
-      break;
-    default: console.log("try again!");
-      break;
+  second.onclick = async function () {
+    await playRollingSound();
+    secondValue = generateRandom();
+    updateDice(this, secondValue);
+    isItTime();
   }
-}
 
-function decide(firstDice, secondDice){
-  if (firstDice > secondDice) {
-    document.firstElementChild.querySelector(".mutable-text").textContent = "Player 1 Wins 🏁";
+  function generateRandom() {
+    var randomValue = Math.floor(Math.random() * 6) + 1;
+    return randomValue;
   }
-  else if(firstDice == secondDice){
-    document.firstElementChild.querySelector(".mutable-text").textContent = "It's a tie 🏳️!";
+
+  function updateDice(dice, value) {
+    //now how to update the image src
+    switch (value) {
+      case 1:
+        dice.setAttribute('src', './images/dice1.png');
+        break;
+      case 2:
+        dice.setAttribute('src', './images/dice2.png');
+        break;
+      case 3:
+        dice.setAttribute('src', './images/dice3.png');
+        break;
+      case 4:
+        dice.setAttribute('src', './images/dice4.png');
+        break;
+      case 5:
+        dice.setAttribute('src', './images/dice5.png');
+        break;
+      case 6:
+        dice.setAttribute('src', './images/dice6.png');
+        break;
+
+      default:
+        console.log('Something went wrong!');
+    }
   }
-  else{
-    document.firstElementChild.querySelector(".mutable-text").textContent = "Player 2 Wins 🏁";
+
+  function isItTime() {
+    if (firstValue > 0 && secondValue > 0) {
+      decideWinner(firstValue, secondValue);
+    }
   }
-}
+
+  function decideWinner(firstValue, secondValue) {
+    if (firstValue > secondValue) {
+      mutableText.textContent = `Player1 is the Winner ${winningFlag}!`;
+    }
+    else if (secondValue > firstValue) {
+      mutableText.textContent = `Player2 is the Winner ${winningFlag}!`;
+    }
+    else {
+      mutableText.textContent = `It's a tie ${tieFlag}!`;
+    }
+
+    setTimeout(function() {
+      mutableText.textContent = 'resetting...';
+    }, 1800)
+
+    setTimeout(function () {
+      reset();
+    }, 3000);
+  }
+
+  function reset() {
+    firstValue = 0, secondValue = 0;
+
+    first.setAttribute('src', './images/dice1.png')
+    second.setAttribute('src', './images/dice1.png')
+
+    mutableText.textContent = 'Left dice is Player1 and Right dice is Player2!';
+  }
+
+  async function playRollingSound() {
+    const rollingSound = new Audio('./sound/dice-roll.mp3');
+    await rollingSound.play();
+  }
+
+});
