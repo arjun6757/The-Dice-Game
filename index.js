@@ -7,15 +7,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const winningFlag = '🏁';
   var firstValue = 0, secondValue = 0;
 
-  first.onclick = async function () {
-    await playRollingSound();
+  first.onclick = function () {
+    playRollingSound();
     firstValue = generateRandom();
     updateDice(this, firstValue);
     isItTime();
   }
 
-  second.onclick = async function () {
-    await playRollingSound();
+  second.onclick = function () {
+    playRollingSound();
     secondValue = generateRandom();
     updateDice(this, secondValue);
     isItTime();
@@ -88,9 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
     mutableText.textContent = 'Left dice is Player1 and Right dice is Player2!';
   }
 
-  async function playRollingSound() {
+  function playRollingSound() {
     const rollingSound = new Audio('./sound/dice-roll.mp3');
-    await rollingSound.play();
+    rollingSound.play();
   }
 
 });
