@@ -11,14 +11,18 @@ document.addEventListener('DOMContentLoaded', () => {
     playRollingSound();
     firstValue = generateRandom();
     updateDice(this, firstValue);
-    isItTime();
+    setTimeout(function() {
+      isItTime();
+    }, 1000);
   }
 
   second.onclick = function () {
     playRollingSound();
     secondValue = generateRandom();
     updateDice(this, secondValue);
-    isItTime();
+    setTimeout(function() {
+      isItTime();
+    }, 1000)
   }
 
   function generateRandom() {
